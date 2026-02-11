@@ -1,0 +1,50 @@
+name: Playwright (triggered by marketing/UI dev push)
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [trigger-playwright]
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment to test'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - development
+          - staging
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Install Playwright browsers (Chromium)
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright
+        env:
+          CI: true
+          PLAYWRIGHT_ENV: ${{ github.event_name == 'push' && 'development' || github.event.inputs.env || github.event.client_payload.env || 'staging' }}
+        run: |
+          xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
+            npx playwright test --project=chromium --reporter=html
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7

@@ -1,0 +1,21 @@
+{
+  "name": "programiz-e2e-playwright",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "PWHEADED=1 playwright test",
+    "test:login": "playwright test login.spec.ts",
+    "test:signup": "playwright test signup.spec.ts",
+    "test:payment": "playwright test payment.spec.ts",
+    "test:ui": "playwright test --ui",
+    "playwright:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.1",
+    "@types/node": "^20.0.0",
+    "dotenv": "^16.4.1",
+    "playwright": "^1.58.1",
+    "typescript": "^5.0.0"
+  }
+}
