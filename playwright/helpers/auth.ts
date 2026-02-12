@@ -27,11 +27,22 @@ export async function login(page: Page, email: string, password: string): Promis
   await page.waitForURL((url) => url.href.startsWith(APP_BASE_URL), { timeout: 20000 });
 }
 
+export type SignUpOptions = {
+  /** If false, do not wait for redirect to app/payment after submit. Use when asserting on API response only. Default true. */
+  waitForRedirect?: boolean;
+};
+
 /**
  * Sign up from pricing page: pricing → Choose this plan (data-testid=yearly) → signup page → Sign up with email → form.
- * Lands on app or payment page.
+ * By default lands on app or payment page; set waitForRedirect: false to only submit and assert on API.
  */
-export async function signUp(page: Page, name: string, email: string, password: string): Promise<void> {
+export async function signUp(
+  page: Page,
+  name: string,
+  email: string,
+  password: string,
+  options?: SignUpOptions
+): Promise<void> {
   await page.goto(MARKETING_URL + '/pricing', { waitUntil: 'domcontentloaded', timeout: 15000 });
 
   const choosePlanBtn = page.getByTestId('yearly');
@@ -53,8 +64,11 @@ export async function signUp(page: Page, name: string, email: string, password: 
   await page.getByTestId('signup-password-input').fill(password);
   await page.getByTestId('signup-submit-button').click();
 
-  await page.waitForURL(
-    (url) => url.href.startsWith(APP_BASE_URL) || (url.hostname.startsWith('pay.') && url.hostname.endsWith('programiz.pro')),
-    { timeout: 20000 }
-  );
+  const shouldWaitForRedirect = options?.waitForRedirect !== false;
+  if (shouldWaitForRedirect) {
+    await page.waitForURL(
+      (url) => url.href.startsWith(APP_BASE_URL) || (url.hostname.startsWith('pay.') && url.hostname.endsWith('programiz.pro')),
+      { timeout: 20000 }
+    );
+  }
 }
