@@ -10,5 +10,7 @@ test.describe('Login', () => {
     await expect(page).toHaveURL(/^https:\/\/app\.(e2e|dev|staging)\.programiz\.pro(\/|$)/);
 
     await page.waitForTimeout(3000);
+    //this test hsould be failed
+    await expect(page.getByTestId('pro-badge')).not.toBeVisible();
   });
 });
