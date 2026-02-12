@@ -14,7 +14,8 @@ const config: PlaywrightTestConfig = {
     trace: 'on-first-retry',
     headless: process.env.PWHEADED !== '1',
     video: 'on-first-retry',
-    launchOptions: process.env.PWHEADED === '1' ? { slowMo: 300 } : undefined
+    // slowMo on local runs so payment redirect works with or without PWHEADED=1 (e.g. --headed)
+    launchOptions: process.env.CI ? undefined : { slowMo: 300 }
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   expect: {

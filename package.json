@@ -7,7 +7,7 @@
     "test:headed": "PWHEADED=1 playwright test",
     "test:login": "playwright test login.spec.ts",
     "test:signup": "playwright test signup.spec.ts",
-    "test:payment": "playwright test payment.spec.ts",
+    "test:payment": "PWHEADED=1 playwright test payment.spec.ts",
     "test:ui": "playwright test --ui",
     "playwright:install": "playwright install chromium"
   },
