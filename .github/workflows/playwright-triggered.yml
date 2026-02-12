@@ -38,8 +38,9 @@ jobs:
           PWHEADED: '1'
           PLAYWRIGHT_ENV: ${{ github.event_name == 'push' && 'development' || github.event.inputs.env || github.event.client_payload.env || 'staging' }}
         run: |
+          echo "PLAYWRIGHT_ENV=$PLAYWRIGHT_ENV (payment test expects Paddle redirect to this env's app URL)"
           xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
-            PWHEADED=1 npx playwright test --project=chromium --reporter=html
+            npx playwright test --project=chromium --reporter=html
 
       - uses: actions/upload-artifact@v4
         if: failure()
