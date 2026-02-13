@@ -8,7 +8,7 @@ import { signUp, paymentFlow, personaOnboardingFlow } from './helpers';
 import { randomNewEmail } from './constants';
 
 test.describe('Payment', () => {
-  test.skip(!!process.env.CI, 'Paddle iframe does not load in CI; run locally: npm run test:payment');
+  // test.skip(!!process.env.CI, 'Paddle iframe does not load in CI; run locally: npm run test:payment');
 
   test.beforeEach(async ({ page }) => {
     page.on('pageerror', (err) => {
