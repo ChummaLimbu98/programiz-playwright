@@ -14,8 +14,17 @@ const config: PlaywrightTestConfig = {
     trace: 'on-first-retry',
     headless: process.env.PWHEADED !== '1',
     video: 'on-first-retry',
-    // slowMo on local runs so payment redirect works with or without PWHEADED=1 (e.g. --headed)
-    launchOptions: process.env.CI ? undefined : { slowMo: 300 }
+    // Chrome args to reduce automation detection and help Paddle iframe load (real payment in CI + local)
+    launchOptions: {
+      ...(process.env.CI ? {} : { slowMo: 300 }),
+      args: [
+        '--disable-blink-features=AutomationControlled',
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins,site-per-process',
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+      ]
+    }
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   expect: {

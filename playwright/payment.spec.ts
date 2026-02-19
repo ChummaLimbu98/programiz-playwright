@@ -1,15 +1,12 @@
 /**
- * Payment test: signup → pay.sandbox (Paddle) → app + persona.
- * Run headed locally: npm run test:payment (or npx playwright test payment.spec.ts --headed).
- * Paddle iframe does not load in CI (xvfb/automation), so this test is skipped in CI.
+ * Payment test: signup → payment (Paddle) → app + persona.
+ * Runs in real env (no mock). Use --headed locally; CI uses xvfb + Chrome args for Paddle iframe.
  */
 import { test } from '@playwright/test';
 import { signUp, paymentFlow, personaOnboardingFlow } from './helpers';
 import { randomNewEmail } from './constants';
 
 test.describe('Payment', () => {
-  // test.skip(!!process.env.CI, 'Paddle iframe does not load in CI; run locally: npm run test:payment');
-
   test.beforeEach(async ({ page }) => {
     page.on('pageerror', (err) => {
       const stack = err.stack ?? '';
