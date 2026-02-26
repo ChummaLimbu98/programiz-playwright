@@ -8,7 +8,7 @@ import { randomNewEmail } from './constants';
 
 test.describe('Stripe Payment', () => {
   test.afterEach(async ({ page }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
+    if (testInfo.status !== testInfo.expectedStatus && !process.env.CI) {
       await page.pause();
     }
   });
