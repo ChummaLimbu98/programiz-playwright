@@ -26,7 +26,18 @@ const config: PlaywrightTestConfig = {
       ]
     }
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'chromium-stripe',
+      use: {
+        ...devices['Desktop Chrome'],
+        extraHTTPHeaders: {
+          'X-Forwarded-For': process.env.STRIPE_TEST_US_IP || '8.8.8.8'
+        }
+      }
+    }
+  ],
   expect: {
     timeout: 10000
   },
