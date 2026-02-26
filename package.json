@@ -2,20 +2,28 @@
   "name": "programiz-e2e-playwright",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "playwright test",
     "test:headed": "PWHEADED=1 playwright test",
     "test:login": "playwright test login.spec.ts",
     "test:signup": "playwright test signup.spec.ts",
     "test:payment": "PWHEADED=1 playwright test payment.spec.ts",
+    "test:ci": "CI=true playwright test payment.spec.ts --project=chromium --reporter=html",
     "test:ui": "playwright test --ui",
     "playwright:install": "playwright install chromium"
   },
   "devDependencies": {
+    "@eslint/js": "^9.15.0",
     "@playwright/test": "^1.58.1",
     "@types/node": "^20.0.0",
     "dotenv": "^16.4.1",
+    "eslint": "^9.15.0",
+    "eslint-plugin-playwright": "^0.22.0",
     "playwright": "^1.58.1",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.15.0"
   }
 }
