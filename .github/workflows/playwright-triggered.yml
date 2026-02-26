@@ -57,7 +57,7 @@ jobs:
         run: |
           echo "PLAYWRIGHT_ENV=$PLAYWRIGHT_ENV"
           xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
-            npx playwright test --project=chromium-stripe --reporter=html
+            npx playwright test playwright/stripe-payment.spec.ts --project=chromium-stripe --reporter=html --headed
 
       - uses: actions/upload-artifact@v4
         if: failure()
