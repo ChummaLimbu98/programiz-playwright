@@ -32,7 +32,8 @@ jobs:
       - name: Run ESLint (code checker)
         run: npm run lint
 
-  playwright:
+  stripe-payment-flow:
+    if: false
     runs-on: ubuntu-latest
     # needs: lint
     steps:
@@ -62,7 +63,42 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-report
+          name: stripe-playwright-report
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
+  paddle-payment-flow:
+    runs-on: ubuntu-latest
+    # needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Install Playwright browsers (Chromium)
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright
+        env:
+          CI: true
+          PWHEADED: '1'
+          PLAYWRIGHT_ENV: ${{ github.event_name == 'push' && 'staging' || github.event.inputs.env || github.event.client_payload.env || 'staging' }}
+        run: |
+          echo "PLAYWRIGHT_ENV=$PLAYWRIGHT_ENV"
+          xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
+            npx playwright test playwright/payment.spec.ts --project=chromium --reporter=html --headed
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: paddle-playwright-report
           path: |
             test-results/
             playwright-report/
