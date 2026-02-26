@@ -24,7 +24,10 @@ export async function stripeCheckoutPaymentFlow(page: Page): Promise<void> {
   console.log('[StripeCheckout] On payment page. URL:', page.url());
 
   // Wait for the outer embedded-checkout iframe to be ready
-  await page.locator(STRIPE_EMBEDDED_IFRAME).first().waitFor({ state: 'attached', timeout: 20000 });
+  const outerIframeEl = page.locator(STRIPE_EMBEDDED_IFRAME).first();
+  await outerIframeEl.waitFor({ state: 'attached', timeout: 20000 });
+  // Scroll the iframe itself into view on the main page so inner elements are within viewport
+  await outerIframeEl.scrollIntoViewIfNeeded();
   await page.waitForTimeout(2000);
 
   const outer = page.frameLocator(STRIPE_EMBEDDED_IFRAME).first();
@@ -33,7 +36,9 @@ export async function stripeCheckoutPaymentFlow(page: Page): Promise<void> {
   const cardOption = outer.getByRole('button', { name: /Pay with card|^Card$/i });
   const hasCardOption = await cardOption.waitFor({ state: 'attached', timeout: 5000 }).then(() => true).catch(() => false);
   if (hasCardOption) {
-    await cardOption.click({ force: true });
+    await cardOption.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+    await cardOption.click();
     await page.waitForTimeout(1000);
   }
 

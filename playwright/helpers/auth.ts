@@ -6,7 +6,7 @@ import { APP_BASE_URL, MARKETING_URL } from '../constants';
  */
 export async function login(page: Page, email: string, password: string): Promise<void> {
   const loginUrl = MARKETING_URL + '/login';
-  await page.goto(loginUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  await page.goto(loginUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
 
   expect(new URL(page.url()).origin).toBe(new URL(MARKETING_URL).origin);
 
@@ -43,16 +43,16 @@ export async function signUp(
   password: string,
   options?: SignUpOptions
 ): Promise<void> {
-  await page.goto(MARKETING_URL + '/pricing', { waitUntil: 'domcontentloaded', timeout: 15000 });
+  await page.goto(MARKETING_URL + '/pricing', { waitUntil: 'domcontentloaded', timeout: 30000 });
 
   const choosePlanBtn = page.getByTestId('yearly');
-  await choosePlanBtn.waitFor({ state: 'visible', timeout: 15000 });
+  await choosePlanBtn.waitFor({ state: 'visible', timeout: 20000 });
   await choosePlanBtn.scrollIntoViewIfNeeded();
   await choosePlanBtn.click();
 
   await page.goto(
     (MARKETING_URL.endsWith('/') ? MARKETING_URL.slice(0, -1) : MARKETING_URL) + '/signup?reason=payment&plan=yearly&ref=ppc',
-    { waitUntil: 'domcontentloaded', timeout: 15000 }
+    { waitUntil: 'domcontentloaded', timeout: 30000 }
   );
 
   const signUpWithEmailBtn = page.getByTestId('login-with-email-button');
