@@ -52,7 +52,7 @@ jobs:
         env:
           CI: true
           PWHEADED: '1'
-          PLAYWRIGHT_ENV: ${{ github.event_name == 'push' && 'development' || github.event.inputs.env || github.event.client_payload.env || 'staging' }}
+          PLAYWRIGHT_ENV: ${{ github.event_name == 'push' && 'staging' || github.event.inputs.env || github.event.client_payload.env || 'staging' }}
           STRIPE_TEST_US_IP: '8.8.8.8'
         run: |
           echo "PLAYWRIGHT_ENV=$PLAYWRIGHT_ENV"
