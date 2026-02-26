@@ -17,7 +17,7 @@ const TEST_CARD = '4242424242424242';
 const TEST_EXP = '05 / 28';
 const TEST_CVC = '100';
 const TEST_ZIP = '44600';
-const TEST_NAME = 'Jane Doea';
+const TEST_NAME = 'Jane Doe';
 
 export async function stripeCheckoutPaymentFlow(page: Page): Promise<void> {
   await page.waitForURL(PAYMENT_PAGE_URL_PATTERN, { timeout: 20000 });
